@@ -15,53 +15,49 @@ exports.getsignuppage=(req,res)=>{
 
 //register user
 
-exports.signup = async (req, res) => {
-    const { username, password } = req.body;
+exports.postsignup=async (req, res) => {
 
-    try {
-        const existingUser = await User.findOne({ name: username });
+    const data =new User({
+        name: req.body.username,
+        password: req.body.password
+    });
 
-        if (existingUser) {
-            res.send('User already exists. Please choose a different username.');
-        } else {
-            const saltRounds = 10;
-            const hashedPassword = await bcrypt.hash(password, saltRounds);
+    // Check if the username already exists in the database
+    const existingUser = await collection.findOne({ name: data.name });
 
-            const newUser = new User({
-                name: username,
-                password: hashedPassword
-            });
+    if (existingUser) {
+        res.send('User already exists. Please choose a different username.');
+    } else {
+        // Hash the password using bcrypt
+        const saltRounds = 10; // Number of salt rounds for bcrypt
+        const hashedPassword = await bcrypt.hash(data.password, saltRounds);
 
-            await newUser.save();
-            res.redirect('/login');
-        }
-    } catch (error) {
-        res.status(500).send('Error occurred during signup.');
+        data.password = hashedPassword; // Replace the original password with the hashed one
+
+        const userdata = await collection.insertMany(data);
+        console.log(userdata);
     }
+
 };
+
 
 // Login User
-exports.login = async (req, res) => {
-    const { username, password } = req.body;
-
+exports.postlogin=async(req, res) => {
     try {
-        const user = await User.findOne({ name: username });
-
-        if (!user) {
-            res.send("Username not found");
-            return;
+        const check = await collection.findOne({ name: req.body.username });
+        if (!check) {
+            res.send("User name cannot found")
         }
-
-        const isPasswordMatch = await bcrypt.compare(password, user.password);
-
+        // Compare the hashed password from the database with the plaintext password
+        const isPasswordMatch = await bcrypt.compare(req.body.password, check.password);
         if (!isPasswordMatch) {
-            res.send("Wrong password");
-        } else {
-            res.render("home");
+            res.send("wrong Password");
         }
-    } catch (error) {
-        res.status(500).send("Wrong details");
+        else {
+            res.rendirect('/home');
+        }
+    }
+    catch {
+        res.send("wrong Details");
     }
 };
-
-
