@@ -54,7 +54,7 @@ exports.postlogin=async(req, res) => {
             res.send("wrong Password");
         }
         else {
-            res.rendirect("home");
+            res.redirect("home");
         }
     }
     catch {

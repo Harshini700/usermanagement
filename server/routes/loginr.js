@@ -1,15 +1,8 @@
-const express=require('express');
-const router=express.Router();
-const controller=require("../controller/controller");
+import express from "express";
+import { signup, login } from "../controller/controller.js";
+const router = express.Router();
 
-//router to render login page
-router.get("/login",controller.getloginpage);
-router.get("/signup",controller.getsignuppage);
+router.post("/signup", signup);
+router.post("/login", login);
 
-//router to handle signup and login
-
-router.post("/signup",controller.getsignuppage);
-router.post("/login",controller.getloginpage);
-
-
-module.exports=router;
+export default router;

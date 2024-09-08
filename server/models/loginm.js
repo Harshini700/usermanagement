@@ -1,5 +1,5 @@
-const mongoose=require("mongoose");
-const userschema=new mongoose.Schema({
+import mongoose from "mongoose";
+const userschema=mongoose.Schema({
     name:{
         type:String,
         required:true,
@@ -10,5 +10,5 @@ const userschema=new mongoose.Schema({
         required:true
     }
 });
-const collection=new mongoose.model('user',userschema);
-module.exports=collection;
+const User=mongoose.model("User",userschema);
+export default User;
