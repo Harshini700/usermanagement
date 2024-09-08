@@ -1,5 +1,5 @@
 const express = require('express');
-const connection = require('./config/login');
+const collection = require('./config/login');
 const mongoose = require('mongoose');
 const path = require('path');
 
@@ -14,7 +14,7 @@ const loginr = require('./routes/loginr');
 // Middlewares
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(express.static("public"));
+app.use(express.static("public")); 
 app.set("view engine", "ejs");
 
 // Use routes

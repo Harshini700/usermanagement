@@ -1,5 +1,5 @@
-const bcrypt=require('bcrypt');
-const User=require('../models/loginm');
+import bcrypt from "bcrypt";
+import User from '../models/loginm';
 
 //render login page
 
@@ -54,7 +54,7 @@ exports.postlogin=async(req, res) => {
             res.send("wrong Password");
         }
         else {
-            res.rendirect('/home');
+            res.rendirect("home");
         }
     }
     catch {

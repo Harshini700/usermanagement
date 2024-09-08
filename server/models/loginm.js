@@ -3,12 +3,12 @@ const userschema=new mongoose.Schema({
     name:{
         type:String,
         required:true,
-        unique:true
+        
     },
     password:{
         type:String,
         required:true
     }
 });
-const User=new mongoose.model('User',userschema);
-module.exports=User;
+const collection=new mongoose.model('user',userschema);
+module.exports=collection;
