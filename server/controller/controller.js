@@ -35,7 +35,7 @@ export const registeruser=async (req, res) => {
         data.password = hashedPassword; // Replace the original password with the hashed one
         
         const userdata = await data.save(); // Save the new user to the database
-        console.log(userdata);
+        console.log('User registered with hashed password:', userdata.password);
         res.send('User registered successfully.');
     }
 
@@ -45,21 +45,24 @@ export const registeruser=async (req, res) => {
 // Login User
 export const loginuser=async(req, res) => {
     try {
-        const check = await collection.findOne({ name: req.body.username });
+        const check = await User.findOne({ name: req.body.username });
         if (!check) {
-            res.send("User name cannot found")
+            return res.send("User name cannot found")
         }
+        console.log("User found:", check);
         // Compare the hashed password from the database with the plaintext password
         const isPasswordMatch = await bcrypt.compare(req.body.password, check.password);
         if (!isPasswordMatch) {
+            console.log("Password mismatch:", req.body.password, check.password);
             return res.send("wrong Password");
         }
         else {
-           return  res.redirect("home");
+           return  res.redirect("/home");
         }
     }
     catch(error) {
-        res.send("Error with login details");
+        console.error("Error:", error);
+        return res.send("Error with login details");
     }
 };
 export const renderHome = (req, res) => {
