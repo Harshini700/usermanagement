@@ -23,7 +23,7 @@ export const registeruser=async (req, res) => {
     });
 
     // Check if the username already exists in the database
-    const existingUser = await collection.findOne({ name: data.name });
+    const existingUser = await User.findOne({ name: data.name });
 
     if (existingUser) {
         res.send('User already exists. Please choose a different username.');
