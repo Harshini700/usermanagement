@@ -1,9 +1,16 @@
 import express from "express";
-import login from './config/login';
+import dotenv from 'dotenv';
 import mongoose from "mongoose";
-import loginr from'./routes/loginr';
+import loginr from'./routes/loginr.js';
 
 const app = express();
+
+// Middlewares
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+app.use(express.static("public")); 
+app.set("view engine", "ejs");
+
 
 // Import routes
 
@@ -24,19 +31,17 @@ mongoose
     .then(() => console.log("Connected to MongoDB"))
     .catch((error) => console.error("Error connecting to MongoDB: ", error));
 
-// Middlewares
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(express.static("public")); 
-app.set("view engine", "ejs");
 
 // Use routes
 app.use('/', loginr);
 
+app.get('/home', (req, res) => {
+    res.render('home');
+});
 
 
 // Define Port for Application
 
 app.listen(PORT, () => {
-    console.log(`Server listening on port ${port}`);
+    console.log(`Server listening on port ${PORT}`);
 });

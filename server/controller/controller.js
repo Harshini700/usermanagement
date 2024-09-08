@@ -1,21 +1,21 @@
 import bcrypt from "bcrypt";
-import User from '../models/loginm';
+import User from '../models/loginm.js';
 
 //render login page
 
-exports.getloginpage=(req,res)=>{
+export const login = async (req, res) =>{
     res.render("login");
 };
 
 //render sign up page
  
-exports.getsignuppage=(req,res)=>{
+export const signup = async (req, res) =>{
     res.render("signup");
 };
 
 //register user
 
-exports.postsignup=async (req, res) => {
+export const registeruser=async (req, res) => {
 
     const data =new User({
         name: req.body.username,
@@ -33,16 +33,17 @@ exports.postsignup=async (req, res) => {
         const hashedPassword = await bcrypt.hash(data.password, saltRounds);
 
         data.password = hashedPassword; // Replace the original password with the hashed one
-
-        const userdata = await collection.insertMany(data);
+        
+        const userdata = await data.save(); // Save the new user to the database
         console.log(userdata);
+        res.send('User registered successfully.');
     }
 
 };
 
 
 // Login User
-exports.postlogin=async(req, res) => {
+export const loginuser=async(req, res) => {
     try {
         const check = await collection.findOne({ name: req.body.username });
         if (!check) {
@@ -51,13 +52,16 @@ exports.postlogin=async(req, res) => {
         // Compare the hashed password from the database with the plaintext password
         const isPasswordMatch = await bcrypt.compare(req.body.password, check.password);
         if (!isPasswordMatch) {
-            res.send("wrong Password");
+            return res.send("wrong Password");
         }
         else {
-            res.redirect("home");
+           return  res.redirect("home");
         }
     }
-    catch {
-        res.send("wrong Details");
+    catch(error) {
+        res.send("Error with login details");
     }
+};
+export const renderHome = (req, res) => {
+    res.render('home');
 };

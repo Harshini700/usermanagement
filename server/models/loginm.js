@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+
 const userschema=mongoose.Schema({
     name:{
         type:String,
