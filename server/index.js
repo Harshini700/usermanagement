@@ -20,17 +20,17 @@ app.set("view engine", "ejs");
 dotenv.config();
 
 const PORT = process.env.PORT || 5001;
-const URI = process.env.MongoDBURI;
+const URI = process.env.MONGO_URI
 
 // Connect to MongoDB
-mongoose
-    .connect(URI, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-    })
-    .then(() => console.log("Connected to MongoDB"))
-    .catch((error) => console.error("Error connecting to MongoDB: ", error));
 
+
+mongoose.connect(URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+})
+.then(() => console.log('MongoDB connected'))
+.catch(err => console.log('Error connecting to MongoDB: ', err));
 
 // Use routes
 app.use('/', loginr);
